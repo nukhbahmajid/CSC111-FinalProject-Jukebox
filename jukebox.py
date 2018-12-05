@@ -1,103 +1,95 @@
-
-# window = pyglet.window.Window()
-# label = pyglet.text.Label("Successfully Installed Pyglet", font_name = "Times New Roman",
-#  font_size = 26, x = window.width//2, y = window.width//2,
-#  anchor_x = "center", anchor_y = "center")
-#
-# @window.event
-# def on_draw():
-#     window.clear()
-#     label.draw()
-# pyglet.app.run()
-
-# pygame - music playing
-# tkinter - to make the basic GUI for the app
-
 import os
 import pygame
 from tkinter.filedialog import askdirectory
 from tkinter import *
+import eyed3
 
-# class Buttons:
-#     def __init__(self, name):
-#         self.name = name
+root = Tk()
+root.minsize(300,300)
 
+listOfSongs = []
+songTitles = []
+index = 0
 
-
+labelVar = StringVar()
+songLabel = Label(root, textvariable = labelVar, width = 50)
 
 def directoryChooser():
-    listOfSongs = []
-    index = 0
     directory = askdirectory()
     os.chdir(directory)
 
     for files in os.listdir(directory):
-        if files.endswith(".mp3"):
+        if files.endswith("mp3"):
+            realdir = os.path.realpath(files)
+            audioTag = eyed3.load(realdir)
+            #tag.link(realdir)
+            songTitles.append(audioTag.tag.title)
             listOfSongs.append(files)
             print(files)
 
     pygame.mixer.init()
-    pygame.mixer.music.load(listOfSongs[1])
+    pygame.mixer.music.load(listOfSongs[0])
     pygame.mixer.music.play()
 
-def jukeboxGUI(root):
-    back = Frame(master = root, width=500, height=500,  bg='pink')
-    back.pack()
-    #root.update()
+directoryChooser()
 
-    label = Label(root, text = "Jukebox")
-    label.pack()
+def updateLabel():
+    global index
+    #global songname
+    labelVar.set(songTitles[index])
 
-    listBox = Listbox(root)
-    listBox.pack()
-
-    nextButton = Button(root, text = "NEXT")
-    nextButton.pack()
-
-    previousButton = Button(root, text = "PREVIOUS")
-    previousButton.pack()
-
-    stopButton = Button(root, text = "STOP")
-    stopButton.pack()
+def nextSong(event):
+    global index
+    index += 1
+    pygame.mixer.music.load(listOfSongs[index])
+    pygame.mixer.music.play()
+    updateLabel()
 
 
+def previousSong(event):
+    global index
+    index -= 1
+    pygame.mixer.music.load(listOfSongs[index])
+    pygame.mixer.music.play()
+    updateLabel()
 
-def main():
-    root = Tk()
-    root.title("Jukebox")
-    jukeboxGUI(root)
-    directoryChooser()
+def stopSong(event):
+    pygame.mixer.music.stop()
+    labelVar.set("")
 
 
 
 
+label = Label(root, text = "Music Player")
+label.pack()
+
+listBox = Listbox(root)
+listBox.pack()
 
 
 
 
+for items in songTitles:
+    listBox.insert(END, items) ### this point onwards, clean code
+
+
+
+nextButton = Button(root, text = "Next song")
+nextButton.pack()
+
+previousButton = Button(root, text = "Previous song")
+previousButton.pack()
+
+stopButton = Button(root, text = "Stop")
+stopButton.pack()
+
+nextButton.bind("<Button-1>", nextSong)
+previousButton.bind("<Button-1>", previousSong)
+stopButton.bind("<Button-1>", stopSong)
+
+songLabel.pack()
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-    root.mainloop()
-    #root.geometry("1200 x 1024")
-    #root.resizable(3, 3)
-
-    #back = Frame(master=root, width=500, height=500, bg='yellow')
-
-
-
-
-
-if __name__ == "__main__":
-    main()
+root.mainloop()
