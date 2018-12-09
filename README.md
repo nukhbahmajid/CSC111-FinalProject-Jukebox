@@ -1,7 +1,7 @@
 # CSC111-FinalProject-Jukebox
 
 
-## Objective : 
+## Objective 
 
 This jukebox is basically a python(2.7 & 3.0) based music player which play songs in the chosen folder. It functions in the same way as online music players such as Spotify, apple music, and etc. 
 
@@ -31,6 +31,9 @@ sudo pip install pygame
  - Install hombrew (https://brew.sh/)
  - Follow the instruction written on the homepage
  - ```pip install eyed3```
+ 
+## How to Run Jukebox.py
+In the command line, first change the directory to the folder “Jukebox”, and pass the following command “python3 jukebox.py”. **Remember**: the **python3** is extremely important because macOS have preinstalled python 2.7 and the program need to run with Python 3.7.0 (the eyed3 module won’t be imported with Python 2.7). 
 
 
 ## Known Bugs
