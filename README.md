@@ -30,5 +30,4 @@ sudo pip install pygame
 3. eyed3 module
  - Install hombrew (https://brew.sh/)
  - Follow the instruction written on the homepage
- - ```pip install eyed3
- ```
+ - ```pip install eyed3```
