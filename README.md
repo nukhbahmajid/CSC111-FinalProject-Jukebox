@@ -15,14 +15,21 @@ This jukebox is basically a python(2.7 & 3.0) based music player which play song
 
 
 ## Installation
-Execute the programs using the terminal (Mac OS). Before installing the modules on the terminal, check if your Python is at least version 3.0. 
+Execute the programs using the terminal (Mac OS). Before installing the modules on the terminal, check if your Python is at least version 3.7. 
 
 
 1. Python version check:
-‘’’python --version’’’
+'''
+python --version
+'''
 2. pygame module
-‘’’sudo pip install pygame’’’
+'''
+sudo pip install pygame
+'''
+
 3. eyed3 module
  - Install hombrew (https://brew.sh/)
  - Follow the instruction written on the homepage
- - ‘’’pip install eyed3’’’ 
+ - '''
+ pip install eyed3
+ '''
