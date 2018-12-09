@@ -31,3 +31,13 @@ sudo pip install pygame
  - Install hombrew (https://brew.sh/)
  - Follow the instruction written on the homepage
  - ```pip install eyed3```
+
+
+## Known Bugs
+The jukebox.py has several different known bugs:
+- The user cannot randomly play songs from the song list. The jukebox doesn’t have the function to shuffle the songs. 
+- The jukebox doesn’t automatically move on to the next song once the previous song finishes playing. The user has to manually click either next song, previous song or play to play the song list from up top. 
+- The jukebox doesn’t have a function to play one single song repeatedly. In order to play the song repeatedly, the user has to wait until the jukebox moves on to the next song and click on the previous song.
+- In order for the Jukebox to display the name of the ‘Now Playing’ song, the songs must have music tag. 
+
+
