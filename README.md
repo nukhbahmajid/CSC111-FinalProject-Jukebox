@@ -19,17 +19,13 @@ Execute the programs using the terminal (Mac OS). Before installing the modules 
 
 
 1. Python version check:
-'''
-python --version
-'''
+```python --version```
 2. pygame module
-'''
+```
 sudo pip install pygame
-'''
+```
 
 3. eyed3 module
  - Install hombrew (https://brew.sh/)
  - Follow the instruction written on the homepage
- - '''
- pip install eyed3
- '''
+ - ```pip install eyed3```
