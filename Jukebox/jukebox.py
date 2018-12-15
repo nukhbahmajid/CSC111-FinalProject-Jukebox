@@ -36,20 +36,33 @@ class Jukebox:
         self.directoryAsk
         os.chdir(self.directoryAsk)
 
-        for files in os.listdir(self.directoryAsk):
-            if files.endswith(".mp3"):
-                realdir = os.path.realpath(files)
-                audioTag = eyed3.load(realdir)
-                self.songTitles.append(audioTag.tag.title)
-                self.listOfSongs.append(files)
-                #print("These are files:", self.listOfSongs)
-                #print("These are the number of files:", len(self.songTitles))
+        try:
+            for files in os.listdir(self.directoryAsk):
+                if files.endswith(".mp3"):
+                    realdir = os.path.realpath(files)
+                    audioTag = eyed3.load(realdir)
+                    self.songTitles.append(audioTag.tag.title)
+                    self.listOfSongs.append(files)
+                    #print("These are files:", self.listOfSongs)
+                    #print("These are the number of files:", len(self.songTitles))  #these are test print statements
+                    pygame.mixer.init()
+                    pygame.mixer.music.load(self.listOfSongs[0])
+                    self.updateLabel()
+                    pygame.mixer.music.play()
+                    pygame.mixer.music.play()
 
-        pygame.mixer.init()
-        pygame.mixer.music.load(self.listOfSongs[0])
-        self.updateLabel()
-        pygame.mixer.music.play()
-        pygame.mixer.music.play()
+
+                # if pygame.mixer.music.get_busy() != True:
+                #     pygame.mixer.music.load(myJukebox.listOfSongs[index - 1])
+                #     pygame.mixer.music.play()
+                #     pygame.mixer.music.play()
+                #     myJukebox.updateLabel()
+                #     index = (index + 1) % len(myJukebox.listOfSongs)
+                #     nextSong(1)
+
+        except IndexError:
+            print(self.Error_NoMP3s)
+
 
 
     def constructButtons(self):
@@ -80,13 +93,31 @@ def playResumeSong(event):
     global myJukebox
     pygame.mixer.music.unpause()
 
-    if pygame.mixer.music.get_busy() != True:
-        index = 1
-        pygame.mixer.music.load(myJukebox.listOfSongs[index - 1])
-        pygame.mixer.music.play()
-        pygame.mixer.music.play()
-        myJukebox.updateLabel()
+    # if pygame.mixer.music.get_busy() != True:                            The following code block is the original code as submitted for prototype II
+    #     index = 1                                                        but is commented out in order to execute the code block below that would
+    #     pygame.mixer.music.load(myJukebox.listOfSongs[index - 1])        hopefully queue the following songs. this addition labeled "after prototype II"
+    #     pygame.mixer.music.play()                                        is in the playResumeSong, nextSong and previousSong functions.
+    #     pygame.mixer.music.play()
+    #     myJukebox.updateLabel()
 
+## additions after prototype II
+    if pygame.mixer.music.get_busy() != True:
+        if (index != 0) and (len(myJukebox.songTitles) != 0):
+            pygame.mixer.music.load(myJukebox.listOfSongs[((index % len(myJukebox.songTitles)) -1)])
+            pygame.mixer.music.play()
+            pygame.mixer.music.play()
+            myJukebox.updateLabel()
+        else:
+            pygame.mixer.music.load(myJukebox.listOfSongs[index - 1])
+            pygame.mixer.music.play()
+            pygame.mixer.music.play()
+            myJukebox.updateLabel()
+        # index = (index + 1) % len(myJukebox.listOfSongs)                 When the Jukebox is stopped and started again, plays from same index but if
+                                                                          #next song pressed skips the immediate next and plays the one after it
+                                                                          # - hence commented out.
+        # nextSong(1)                                                     <-- This throws off a recursion error, and doesn;t queue the songs either.
+        myJukebox.nextButton.invoke()                                    # hoped to trigger the next song function without clicking the button.
+                                                                         # result: neither throws off an error nor queues songs.
 
 def pauseSong(event):
     global index
@@ -99,6 +130,7 @@ def nextSong(event):
     global index
     global myJukebox
     index += 1
+    #print(event)                                                      # the following three comments were test statements
     #print("new index:", index)
     #print("these are the number of songs:", len(myJukebox.songTitles))
     if (index != 0) and (len(myJukebox.songTitles) != 0):
@@ -113,12 +145,35 @@ def nextSong(event):
         pygame.mixer.music.play()
         myJukebox.updateLabel()
 
+    # event = ** here you want the program to think that the nextbutton was pressed to execute nextsong function, for queueing purposes.**
+    # ** search on slack for how to make a button press trigger another button press **
+
+## additions after prototype II
+    if pygame.mixer.music.get_busy() != True:
+        if (index != 0) and (len(myJukebox.songTitles) != 0):
+            pygame.mixer.music.load(myJukebox.listOfSongs[((index % len(myJukebox.songTitles)) -1)])
+            pygame.mixer.music.play()
+            pygame.mixer.music.play()
+            myJukebox.updateLabel()
+        else:
+            pygame.mixer.music.load(myJukebox.listOfSongs[index - 1])
+            pygame.mixer.music.play()
+            pygame.mixer.music.play()
+            myJukebox.updateLabel()
+        # index = (index + 1) % len(myJukebox.listOfSongs)                 When the Jukebox is stopped and started again, plays from same index but if
+                                                                          #next song pressed skips the immediate next and plays the one after it
+                                                                          # - hence commented out.
+        # nextSong(1)                                                     <-- This throws off a recursion error, and doesn;t queue the songs either.
+        myJukebox.nextButton.invoke()                                    # hoped to trigger the next song function without clicking the button.
+                                                                         # result: neither throws off an error nor queues songs.
+
+
 
 def previousSong(event):
     global index
     global myJukebox
     index -= 1
-    #print("new index is:", index)
+    #print("new index is:", index) #test print statements to see if the modulo method worked
     #print("these are the number of songs:", len(myJukebox.songTitles))
     if (index != 0) and (len(myJukebox.songTitles) != 0):
         pygame.mixer.music.load(myJukebox.listOfSongs[((index % len(myJukebox.songTitles)) -1)])
@@ -131,6 +186,27 @@ def previousSong(event):
         pygame.mixer.music.play()
         pygame.mixer.music.play()
         myJukebox.updateLabel()
+
+## additions after prototype II
+    if pygame.mixer.music.get_busy() != True:
+        if (index != 0) and (len(myJukebox.songTitles) != 0):
+            pygame.mixer.music.load(myJukebox.listOfSongs[((index % len(myJukebox.songTitles)) -1)])
+            pygame.mixer.music.play()
+            pygame.mixer.music.play()
+            myJukebox.updateLabel()
+        else:
+            pygame.mixer.music.load(myJukebox.listOfSongs[index - 1])
+            pygame.mixer.music.play()
+            pygame.mixer.music.play()
+            myJukebox.updateLabel()
+        # index = (index + 1) % len(myJukebox.listOfSongs)                 When the Jukebox is stopped and started again, plays from same index but if
+                                                                          #next song pressed skips the immediate next and plays the one after it
+                                                                          # - hence commented out.
+        # nextSong(1)                                                     <-- This throws off a recursion error, and doesn;t queue the songs either.
+        myJukebox.nextButton.invoke()                                    # hoped to trigger the next song function without clicking the button.
+                                                                         # result: neither throws off an error nor queues songs.
+
+
 
 def stopSong(event):
     global index
