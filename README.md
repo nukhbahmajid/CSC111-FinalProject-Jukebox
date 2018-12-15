@@ -33,7 +33,7 @@ sudo pip install pygame
  - ```pip install eyed3```
  
 ## How to Run Jukebox.py
-In the command line, first change the directory to the folder “Jukebox”, and pass the following command “python3 jukebox.py”. **Remember**: the **python3** is extremely important because macOS have preinstalled python 2.7 and the program need to run with Python 3.7.0 (the eyed3 module won’t be imported with Python 2.7). 
+In the command line, first change the directory to the folder “Jukebox”, and pass the following command “python3 jukebox.py”. **Remember**: the **python3** is extremely important because macOS has preinstalled python 2.7 and the program needs to run with Python 3.7.0 (the eyed3 module won’t be imported with Python 2.7). 
 
 
 ## Known Bugs
